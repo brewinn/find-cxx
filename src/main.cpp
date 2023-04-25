@@ -21,6 +21,12 @@ void help() {
 
 void version() { std::cout << "find-cxx 0.1.0\n"; }
 
+void print_paths(std::vector<std::filesystem::directory_entry> entries) {
+  for (auto &entry : entries) {
+    std::cout << entry.path().c_str() << "\n";
+  }
+}
+
 int main(const int argc, const char *argv[]) {
   if (argc < 2) {
     help();
@@ -42,12 +48,14 @@ int main(const int argc, const char *argv[]) {
   using namespace std::string_literals;
 
   if (args.name) {
-    find_by_name(args.path.value_or("."s), args.name.value());
+    auto entries = find_by_name(args.path.value_or("."s), args.name.value());
+    print_paths(entries);
     return 0;
   }
 
   if (args.type) {
-    find_by_type(args.path.value_or("."s), args.type.value());
+    auto entries = find_by_type(args.path.value_or("."s), args.type.value());
+    print_paths(entries);
     return 0;
   }
 

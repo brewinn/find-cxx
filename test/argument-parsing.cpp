@@ -33,3 +33,19 @@ TEST(ArgumentParsing, Path) {
   arguments expected = {.path = "xyz"};
   EXPECT_EQ(args, expected);
 }
+
+TEST(ArgumentParsing, Name) {
+  int argc = 3;
+  const char *argv[] = {"find-cxx", "--name", "abc"};
+  arguments args = parse_arguments(argc, argv);
+  arguments expected = {.name = "abc"};
+  EXPECT_EQ(args, expected);
+}
+
+TEST(ArgumentParsing, Type) {
+  int argc = 3;
+  const char *argv[] = {"find-cxx", "--type", "f"};
+  arguments args = parse_arguments(argc, argv);
+  arguments expected = {.type = 'f'};
+  EXPECT_EQ(args, expected);
+}

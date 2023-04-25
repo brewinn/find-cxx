@@ -13,6 +13,8 @@ find_package(GTest REQUIRED)
 add_executable(
   find-cxx-test
   src/argument-parsing.cpp
+  src/find-cxx.cpp
+  test/find-cxx.cpp
   test/argument-parsing.cpp)
 
 target_include_directories(find-cxx-test PRIVATE include)
