@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 
+#include "argument-parsing.hpp"
 #include "find-cxx.hpp"
 
 void help() {
@@ -20,82 +21,35 @@ void help() {
 
 void version() { std::cout << "find-cxx 0.1.0\n"; }
 
-// Borrowing from
-// https://stackoverflow.com/questions/865668/parsing-command-line-arguments-in-c
-// {
-char *getCmdOption(char **begin, char **end, const std::string &option) {
-  char **itr = std::find(begin, end, option);
-  if (itr != end && ++itr != end) {
-    return *itr;
-  }
-  return 0;
-}
-
-bool cmdOptionExists(char **begin, char **end, const std::string &option) {
-  return std::find(begin, end, option) != end;
-}
-// }
-
-// Helper function, return the option if either the long or short version was
-// specified
-const char *parse_option(char **args_start, char **args_end,
-                         const char *short_option, const char *long_option) {
-  char *option = getCmdOption(args_start, args_end, short_option);
-  if (option != nullptr) {
-    return option;
-  }
-
-  option = getCmdOption(args_start, args_end, long_option);
-  if (option != nullptr) {
-    return option;
-  }
-
-  return nullptr;
-}
-
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     help();
     return 2;
   }
 
-  char **args_start = argv;
-  char **args_end = argv + argc;
-  if (cmdOptionExists(args_start, args_end, "-h") ||
-      cmdOptionExists(args_start, args_end, "--help")) {
+  arguments args = parse_arguments(argc, argv);
+
+  if (args.help) {
     help();
     return 0;
   }
 
-  if (cmdOptionExists(args_start, args_end, "-v") ||
-      cmdOptionExists(args_start, args_end, "--version")) {
+  if (args.version) {
     version();
     return 0;
   }
 
-  // For convenience, we can capture the args in a lambda, so we need only
-  // specify the long and short option
-  auto parse_arg = [=](const char *short_option, const char *long_option) {
-    return parse_option(args_start, args_end, short_option, long_option);
-  };
+  using namespace std::string_literals;
 
-  const char *path = parse_arg("-p", "--path");
-  if (path == nullptr) {
-    path = ".";
-  }
-
-  const char *name = parse_arg("-n", "--name");
-  if (name) {
-    find_by_name(path, name);
+  if (args.name) {
+    find_by_name(args.path.value_or("."s), args.name.value());
     return 0;
   }
 
-  const char *type = parse_arg("-t", "--type");
-  if (type) {
-    find_by_type(path, *type);
+  if (args.type) {
+    find_by_type(args.path.value_or("."s), args.type.value());
     return 0;
   }
 
-  help();
   return 1;
 }

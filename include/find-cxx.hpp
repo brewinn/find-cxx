@@ -1,7 +1,9 @@
-#ifndef __HEADER_FIND_CXX__
-#define __HEADER_FIND_CXX__
+#ifndef HEADER_FIND_CXX__
+#define HEADER_FIND_CXX__
 
-void find_by_name(const char *path, const char *name);
-void find_by_type(const char *path, const char type);
+#include <string>
+
+void find_by_name(const std::string path, const std::string name);
+void find_by_type(const std::string path, const char type);
 
 #endif

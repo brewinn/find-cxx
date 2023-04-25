@@ -5,7 +5,7 @@
 
 namespace fs = std::filesystem;
 
-void find_by_name(const char *path, const char *name) {
+void find_by_name(const std::string path, const std::string name) {
   try {
     std::regex re(name);
     for (const auto &entry : fs::recursive_directory_iterator(path)) {
@@ -19,7 +19,7 @@ void find_by_name(const char *path, const char *name) {
   }
 }
 
-void find_by_type(const char *path, const char type) {
+void find_by_type(const std::string path, const char type) {
   // Check for valid type
   // Maybe an enum or variant would also work, but I like the simplicity of just
   // using char
