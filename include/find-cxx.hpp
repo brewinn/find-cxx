@@ -3,7 +3,7 @@
 
 #include <string>
 
-void find_by_name(const std::string path, const std::string name);
-void find_by_type(const std::string path, const char type);
+void find_by_name(const std::string_view path, const std::string name);
+void find_by_type(const std::string_view path, const char type);
 
 #endif
