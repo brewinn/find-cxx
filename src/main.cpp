@@ -21,7 +21,7 @@ void help() {
 
 void version() { std::cout << "find-cxx 0.1.0\n"; }
 
-int main(int argc, char *argv[]) {
+int main(const int argc, const char *argv[]) {
   if (argc < 2) {
     help();
     return 2;

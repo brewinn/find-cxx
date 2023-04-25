@@ -1,29 +1,37 @@
 #include <algorithm>
 #include <iostream>
+#include <tuple>
 
 #include "argument-parsing.hpp"
+
+bool operator==(const arguments &lhs, const arguments &rhs) {
+  return std::tie(lhs.help, lhs.version, lhs.path, lhs.name, lhs.type) ==
+         std::tie(rhs.help, rhs.version, rhs.path, rhs.name, rhs.type);
+}
 
 // Borrowing from
 // https://stackoverflow.com/questions/865668/parsing-command-line-arguments-in-c
 // {
-char *getCmdOption(char **begin, char **end, const std::string &option) {
-  char **itr = std::find(begin, end, option);
+const char *getCmdOption(const char **begin, const char **end,
+                         const std::string &option) {
+  const char **itr = std::find(begin, end, option);
   if (itr != end && ++itr != end) {
     return *itr;
   }
   return 0;
 }
 
-bool cmdOptionExists(char **begin, char **end, const std::string &option) {
+bool cmdOptionExists(const char **begin, const char **end,
+                     const std::string &option) {
   return std::find(begin, end, option) != end;
 }
 // }
 
 // Helper function, return the option if either the long or short version was
 // specified
-const char *parse_option(char **args_start, char **args_end,
+const char *parse_option(const char **args_start, const char **args_end,
                          const char *short_option, const char *long_option) {
-  char *option = getCmdOption(args_start, args_end, short_option);
+  const char *option = getCmdOption(args_start, args_end, short_option);
   if (option != nullptr) {
     return option;
   }
@@ -36,9 +44,9 @@ const char *parse_option(char **args_start, char **args_end,
   return nullptr;
 }
 
-arguments parse_arguments(int argc, char **argv) {
-  char **args_start = argv;
-  char **args_end = argv + argc;
+arguments parse_arguments(int argc, const char **argv) {
+  const char **args_start = argv;
+  const char **args_end = argv + argc;
 
   arguments args;
   bool help, version;
